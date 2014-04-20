@@ -1,0 +1,125 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JFrame;
+
+
+public class View extends JFrame implements MouseListener{
+	
+	int offset = 23;
+	int scale = 20;
+	int width = 40;
+	int height = 40;
+	Minefield field;
+
+	public View() {
+		super("Minesweeper");
+		setSize(width*scale,height*scale + offset);
+		addMouseListener(this);
+		field = new Minefield();
+		
+		setVisible(true);
+		
+	}
+	
+	public void paint(Graphics g)
+	{
+		paintGrid(g);
+		paintPieces(g);
+	}
+
+	private void paintGrid(Graphics g) {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0,0,800,800 + offset);
+		
+		g.setColor(Color.GRAY);
+		for(int x = 0; x < width; x ++)
+		{
+			for(int y = 0; y < height; y++)
+			{
+				
+				g.fillRect(x*scale+1, offset+ 1 + y*scale, 18,18);
+			}
+		}
+		
+	}
+	
+	private void paintPieces(Graphics g)
+	{
+		g.setColor(Color.WHITE);
+		for(int x = 0; x < width; x ++)
+		{
+			for(int y = 0; y < height; y++)
+			{
+				if(! field.isVisible(x,y))
+				{
+					// do nothing
+				}
+				else if(field.isMine(x, y))
+				{
+					g.setColor(Color.BLACK);
+				}
+				else if(field.isFlag(x,y))
+				{
+					g.setColor(Color.BLACK);
+				}
+				else if(field.getSquare(x,y) > 0)
+				{
+					switch(field.getSquare(x, y))
+					{
+					case 1: g.setColor(Color.BLUE); break;
+					case 2: g.setColor(Color.GREEN); break;
+					case 3: g.setColor(Color.RED); break;
+					case 4: g.setColor(Color.MAGENTA); break;
+					case 5: g.setColor(Color.CYAN); break;
+					
+					}
+					
+					g.drawString("" + field.getSquare(x,y), x*scale+6, y*scale + 38);
+				}
+				
+				else
+				{
+					g.setColor(Color.LIGHT_GRAY);
+					g.fillRect(x*scale + 1, y*scale + offset + 1, 18, 18);
+				}
+				
+
+			}
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		field.clicked(e.getX() / scale, e.getY() / scale);
+		repaint();
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
